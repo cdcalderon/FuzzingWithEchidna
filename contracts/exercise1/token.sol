@@ -1,4 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0
+
+import "@openzeppelin/contracts/math/SafeMath.sol";
+
 pragma solidity ^0.7.0;
 
 contract Ownable {
@@ -32,10 +35,20 @@ contract Pausable is Ownable {
 }
 
 contract Token is Ownable, Pausable {
+    using SafeMath for uint256;
     mapping(address => uint256) public balances;
 
     function transfer(address to, uint256 value) public whenNotPaused {
-        balances[msg.sender] -= value;
-        balances[to] += value;
+        balances[msg.sender] = balances[msg.sender].sub(value);
+        balances[to] = balances[to].add(value);
     }
+
+    // function transfer(address to, uint256 value) public whenNotPaused {
+    //     uint256 preBalanceMsgSender = balances[msg.sender];
+    //     uint256 preBalanceTo = balances[to];
+    //     balances[msg.sender] -= value;
+    //     balances[to] += value;
+    //     require(balances[msg.sender] <= preBalanceMsgSender);
+    //     require(balances[to] >= preBalanceTo);
+    // }
 }
