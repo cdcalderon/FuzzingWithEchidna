@@ -14,6 +14,9 @@ module.exports = {
         version: "0.8.15",
       },
       {
+        version: "0.8.7",
+      },
+      {
         version: "0.8.1",
       },
       {
@@ -21,6 +24,12 @@ module.exports = {
       },
       {
         version: "0.7.0",
+      },
+      {
+        version: "0.6.0",
+      },
+      {
+        version: "0.5.0",
       },
     ],
   },
