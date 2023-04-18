@@ -1,2 +1,4 @@
-seqLen: 10000
-testLimit: 100000
+seqLen: 500
+testLimit: 1000000
+#balanceContract: 1000000000000000000
+#contractAddr: "TestTokenWhale"

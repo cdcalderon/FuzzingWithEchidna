@@ -1,4 +1,6 @@
 # Can set testMode to property or assertion mode depending on how you want to test the system's properties
-testMode: assertion
+#testMode: assertion
 # You should ALWAYS set corpusDir to track coverage
 corpusDir: corpus
+seqLen: 500
+testLimit: 500000

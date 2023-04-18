@@ -1,0 +1,112 @@
+/Users/ccalderon/Documents/rareskills/week4/contracts/tokenWhale/TestTokenWhale.sol
+  1 |     | //SPDX-License-Identifier: MIT
+  2 |     | pragma solidity 0.4.25;
+  3 |     | 
+  4 |     | import "./TokenWhaleChallenge.sol";
+  5 | *r  | 
+  6 |     | contract TestTokenWhale is TokenWhaleChallenge {
+  7 |     |     address echidna_caller = msg.sender;
+  8 |     | 
+  9 |     |     constructor() public TokenWhaleChallenge(echidna_caller) {}
+ 10 |     | 
+ 11 |     |     function echidna_test_allowance() public view returns (bool) {
+ 12 |     |         return allowance[echidna_caller][address(this)] >= 0;
+ 13 |     |     }
+ 14 |     | 
+ 15 |     |     // function echidna_test_balance() public view returns (bool) {
+ 16 |     |     //     return balanceOf[echidna_caller] < 1000000;
+ 17 |     |     // }
+ 18 |     | 
+ 19 |     |     // function echidna_test_balance() public view returns (bool) {
+ 20 |     |     //     return balanceOf[echidna_caller] <= totalSupply;
+ 21 |     |     // }
+ 22 |     | 
+ 23 |     |     //  function echidna_test_balance() public view returns (bool) {
+ 24 |     |     //     return !isComplete();
+ 25 |     |     // }
+ 26 |     | 
+ 27 |     |     // function echidna_test_transfer() public {
+ 28 |     |     //     uint256 balanceBefore = balanceOf[address(this)];
+ 29 |     |     //     uint256 amountToTransfer = balanceBefore / 2;
+ 30 |     | 
+ 31 |     |     //     transfer(address(this), amountToTransfer);
+ 32 |     | 
+ 33 |     |     //     uint256 balanceAfter = balanceOf[address(this)];
+ 34 |     |     //     assert(balanceAfter == balanceBefore);
+ 35 |     |     // }
+ 36 |     | 
+ 37 |     |     // function echidna_test_approve_and_transferFrom() public {
+ 38 |     |     //     uint256 balanceBefore = balanceOf[address(this)];
+ 39 |     |     //     uint256 amountToTransfer = balanceBefore / 2;
+ 40 |     |     //     approve(address(this), amountToTransfer);
+ 41 |     | 
+ 42 |     |     //     transferFrom(address(this), address(this), amountToTransfer);
+ 43 |     | 
+ 44 |     |     //     uint256 balanceAfter = balanceOf[address(this)];
+ 45 |     |     //     assert(balanceAfter == balanceBefore);
+ 46 |     |     // }
+ 47 |     | }
+ 48 |     | 
+
+/Users/ccalderon/Documents/rareskills/week4/contracts/tokenWhale/TokenWhaleChallenge.sol
+  1 |     | pragma solidity ^0.4.25;
+  2 |     | 
+  3 |     | contract TokenWhaleChallenge {
+  4 |     |     address player;
+  5 |     | 
+  6 | *   |     uint256 public totalSupply;
+  7 | *r  |     mapping(address => uint256) public balanceOf;
+  8 | *   |     mapping(address => mapping(address => uint256)) public allowance;
+  9 |     | 
+ 10 | *   |     string public name = "Simple ERC20 Token";
+ 11 | *   |     string public symbol = "SET";
+ 12 | *   |     uint8 public decimals = 18;
+ 13 |     | 
+ 14 |     |     function TokenWhaleChallenge(address _player) public {
+ 15 |     |         player = _player;
+ 16 |     |         totalSupply = 1000;
+ 17 |     |         balanceOf[player] = 1000;
+ 18 |     |     }
+ 19 |     | 
+ 20 | *   |     function isComplete() public view returns (bool) {
+ 21 | *   |         return balanceOf[player] >= 1000000;
+ 22 |     |     }
+ 23 |     | 
+ 24 |     |     event Transfer(address indexed from, address indexed to, uint256 value);
+ 25 |     | 
+ 26 | *   |     function _transfer(address to, uint256 value) internal {
+ 27 | *   |         balanceOf[msg.sender] -= value;
+ 28 | *   |         balanceOf[to] += value;
+ 29 |     | 
+ 30 | *   |         emit Transfer(msg.sender, to, value);
+ 31 |     |     }
+ 32 |     | 
+ 33 | *r  |     function transfer(address to, uint256 value) public {
+ 34 | *r  |         require(balanceOf[msg.sender] >= value);
+ 35 | *r  |         require(balanceOf[to] + value >= balanceOf[to]);
+ 36 |     | 
+ 37 | *   |         _transfer(to, value);
+ 38 |     |     }
+ 39 |     | 
+ 40 |     |     event Approval(
+ 41 |     |         address indexed owner,
+ 42 |     |         address indexed spender,
+ 43 |     |         uint256 value
+ 44 |     |     );
+ 45 |     | 
+ 46 | *r  |     function approve(address spender, uint256 value) public {
+ 47 | *   |         allowance[msg.sender][spender] = value;
+ 48 | *   |         emit Approval(msg.sender, spender, value);
+ 49 |     |     }
+ 50 |     | 
+ 51 | *r  |     function transferFrom(address from, address to, uint256 value) public {
+ 52 | *r  |         require(balanceOf[from] >= value);
+ 53 | *r  |         require(balanceOf[to] + value >= balanceOf[to]);
+ 54 | *r  |         require(allowance[from][msg.sender] >= value);
+ 55 |     | 
+ 56 | *   |         allowance[from][msg.sender] -= value;
+ 57 | *   |         _transfer(to, value);
+ 58 |     |     }
+ 59 |     | }
+ 60 |     | 
+
