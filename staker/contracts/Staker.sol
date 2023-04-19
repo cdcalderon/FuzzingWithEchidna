@@ -5,7 +5,6 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 contract Staker {
     // stakedBalances holds the staked balance of a user
     mapping(address => uint256) public stakedBalances;
-
     IERC20 public tokenToStake;
 
     // Set the token that will be staked
@@ -14,9 +13,13 @@ contract Staker {
     }
 
     /// @dev stake function will stake some amount of tokenToStake and update the user balance
-    function stake(uint256 amount) public returns(uint256 stakedAmount) {
+    function stake(uint256 amount) public returns (uint256 stakedAmount) {
         // This is not safe, use safeTransferFrom
-        bool success = tokenToStake.transferFrom(msg.sender, address(this), amount);
+        bool success = tokenToStake.transferFrom(
+            msg.sender,
+            address(this),
+            amount
+        );
         require(success == true, "transferFrom failed");
 
         // The exchange rate of token to staked token is 1:1
@@ -26,9 +29,12 @@ contract Staker {
     }
 
     /// @dev unstake function will unstake some amount and transfer the associated amount of tokenToStake to the user
-    function unstake(uint256 stakedAmount) public returns(uint256 amount) {
+    function unstake(uint256 stakedAmount) public returns (uint256 amount) {
         // Make sure msg.sender has staked more than stakedAmount
-        require(stakedBalances[msg.sender] >= stakedAmount, "Cannot unstake more than you have");
+        require(
+            stakedBalances[msg.sender] >= stakedAmount,
+            "Cannot unstake more than you have"
+        );
         // Update the balance of the sender
         stakedBalances[msg.sender] -= stakedAmount;
         // You get back what you deposited
